@@ -1,0 +1,34 @@
+{
+  "name": "@davestewart/turbo-tasks",
+  "version": "1.0.0",
+  "description": "Manage Turborepo tasks more easily with a prompt-based CLI",
+  "author": "Dave Stewart",
+  "license": "ISC",
+  "keywords": [
+    "turborepo",
+    "monorepo",
+    "vercel",
+    "yarn",
+    "pnpm",
+    "npm"
+  ],
+  "main": "main.js",
+  "bin": {
+    "turbo-tasks": "main.js"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "enquirer": "^2.3.6",
+    "rimraf": "^3.0.2",
+    "shelljs": "^0.8.5"
+  },
+  "peerDependencies": {
+    "turbo": "latest"
+  },
+  "homepage": "https://github.com/davestewart/turbo-tasks#readme",
+  "bugs": "https://github.com/davestewart/turbo-tasks/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davestewart/turbo-tasks.git"
+  }
+}
