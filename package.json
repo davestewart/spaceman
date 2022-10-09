@@ -1,6 +1,6 @@
 {
   "name": "@davestewart/spaceman",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Easily manage monorepo / workspace tasks via a prompt-based CLI",
   "author": "Dave Stewart",
   "license": "ISC",

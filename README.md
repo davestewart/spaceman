@@ -1,21 +1,50 @@
-# 🧑‍🚀 Spaceman
+# Spaceman
 
-> Easily manage monorepo / workspace tasks via a prompt-based CLI
+> Manage monorepo workspaces with a prompt-based CLI
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/davestewart/spaceman/master/res/splash.png" alt="Spaceman">
+</p>
 
 ## Abstract
 
-Workspaces – which are supported by [NPM](https://docs.npmjs.com/cli/v8/using-npm/workspaces), [PNPM](https://pnpm.io/workspaces) and [Yarn](https://classic.yarnpkg.com/lang/en/docs/workspaces/) – provide a streamlined workflow to manage multiple packages within a single repository, but require a certain amount of knowledge, configuration and terminal-fu for everyday tasks.
+Workspaces provide a streamlined workflow to manage multiple packages within a single repository, but require a certain amount of knowledge, configuration and terminal-fu for everyday tasks.
 
-
-## Overview
-
-Spaceman makes running workspace tasks easier by wrapping them in a question-based format:
+Spaceman makes running complex or multistep tasks easier by wrapping them in prompts, and batching commands on confirmation:
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/davestewart/spaceman/master/res/spaceman.gif" alt="Spaceman CLI">
 </p>
 
-Confirming prompts will update config, run commands, create, update and delete folders or files as needed – even stubbing out new workspaces with initial content to let you quickly get up-to-speed with your monorepo setup 🚀
+Why read the docs when you can just answer questions?
+
+Spaceman supports [NPM](https://docs.npmjs.com/cli/v8/using-npm/workspaces), [Yarn](https://classic.yarnpkg.com/lang/en/docs/workspaces/) and [Turborepo](https://turborepo.org/), with support for [PNPM](https://pnpm.io/workspaces) coming in the next release.
+
+## Overview
+
+The following tasks are available:
+
+**Packages:**
+
+- [Install](#install)<br>
+  Install one or more packages to a target repository
+- [Uninstall](#uninstall)<br>
+  Uninstall one or more packages from a target repository
+- [Update](#update)<br>
+  Update one or more packages in a target repository
+- [Reset](#reset)<br>
+  Remove all Node modules-related files in all repos, and reinstall
+
+**Workspaces:**
+
+- [Share](#share)<br>
+  Make a workspace available for use within another workspace
+- [Group](#group)<br>
+  Add a new workspace group
+- [Add](#add)<br>
+  Add a new workspace
+- [Remove](#remove)<br>
+  Remove an existing workspace
 
 ## Setup
 
@@ -64,6 +93,8 @@ Choose a task to run it and view further options:
 ```
 
 The choices should be self-explanatory, but check the documentation below for more detail.
+
+# Tasks
 
 ## Packages
 
@@ -177,6 +208,7 @@ Type to confirm     - type the name of the workspace to confirm deletion
 
 Confirming will:
 
+- remove the dependency from other workspaces
 - uninstall workspace dependencies 
 - remove the workspace folder
 - optionally update the repository's `workspaces` list
