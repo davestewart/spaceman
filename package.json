@@ -1,20 +1,24 @@
 {
-  "name": "@davestewart/turbo-tasks",
+  "name": "@davestewart/spaceman",
   "version": "1.0.0",
-  "description": "Manage Turborepo tasks more easily with a prompt-based CLI",
+  "description": "Easily manage monorepo / workspace tasks via a prompt-based CLI",
   "author": "Dave Stewart",
   "license": "ISC",
   "keywords": [
-    "turborepo",
     "monorepo",
+    "turborepo",
     "vercel",
     "yarn",
     "pnpm",
     "npm"
   ],
   "main": "main.js",
+  "files": [
+    "main.js",
+    "src"
+  ],
   "bin": {
-    "turbo-tasks": "main.js"
+    "spaceman": "main.js"
   },
   "dependencies": {
     "colors": "^1.4.0",
@@ -22,13 +26,10 @@
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5"
   },
-  "peerDependencies": {
-    "turbo": "latest"
-  },
-  "homepage": "https://github.com/davestewart/turbo-tasks#readme",
-  "bugs": "https://github.com/davestewart/turbo-tasks/issues",
+  "homepage": "https://github.com/davestewart/spaceman#readme",
+  "bugs": "https://github.com/davestewart/spaceman/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davestewart/turbo-tasks.git"
+    "url": "git+https://github.com/davestewart/spaceman.git"
   }
 }
