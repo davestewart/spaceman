@@ -1,7 +1,7 @@
 {
   "name": "@davestewart/spaceman",
   "version": "1.0.1",
-  "description": "Easily manage monorepo / workspace tasks via a prompt-based CLI",
+  "description": "Manage monorepo workspaces with a prompt-based CLI",
   "author": "Dave Stewart",
   "license": "ISC",
   "keywords": [
