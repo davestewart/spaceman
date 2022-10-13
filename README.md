@@ -51,7 +51,7 @@ The following tasks are available:
 Install the library via NPM:
 
 ```bash
-npm i @davestewart/spaceman --save-dev
+npm i spaceman --save-dev
 ```
 
 ## Usage
