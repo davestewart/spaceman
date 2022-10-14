@@ -88,7 +88,7 @@ You should immediately see set of navigable tasks:
 To run a specific task, pass the task name as a second argument:
 
 ```
-spaceman run
+spaceman install
 ```
 
 Choose a task to run it and view further options:
@@ -116,7 +116,7 @@ The choices should be self-explanatory, but check the documentation below for mo
 Run any root or package script:
 
 ```
-Script              - type to filter scripts
+Script              - type to filter scripts (use spaces for partial matching)
 ```
 
 Confirming will run the selected script.

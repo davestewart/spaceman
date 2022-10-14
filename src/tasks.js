@@ -63,6 +63,10 @@ function chooseScript (input = {}) {
     type: 'autocomplete',
     choices,
     limit: 10,
+    suggest (text, choices) {
+      const rx = new RegExp(text.replace(/\s+/g, '.*'))
+      return choices.filter(choice => rx.test(choice.name))
+    },
     result (choice) {
       return items.find(item => item.choice === choice)
     },
