@@ -1,5 +1,17 @@
 const Fs = require('fs')
 
+/**
+ * Package.json info
+ *
+ * @typedef   {Object}                      Package
+ * @property  {string}                      name              The package name
+ * @property  {string[]}                   [workspaces]       A list of workspaces
+ * @property  {Object.<string, string>}    [scripts]          A list of scripts
+ * @property  {Object.<string, string>}    [dependencies]     A list of dependencies
+ * @property  {Object.<string, string>}    [devDependencies]  A list of dev dependencies
+ * @property  {Object.<string, string>}    [spaceman]         Spaceman settings
+ */
+
 function isValidName (name) {
   const rx = /^[\da-z][-+.\da-z]+$/
   return name.startsWith('@')

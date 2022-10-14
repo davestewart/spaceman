@@ -1,27 +1,39 @@
 const Fs = require('fs')
 const rimraf = require('rimraf')
+const { toSentence, toCamel, uniq, sortObject, removeItem, toArray } = require('./utils')
+const { ask, confirm, _ask, _heading, makeChoicesGroup } = require('./utils/enquirer')
+const { log, exec, exit } = require('./utils/shell')
+const { getSetting } = require('./utils/spaceman')
+const { ROOT } = require('./utils/vars')
 const {
   getWorkspaces,
   getWorkspacesChoices,
   getWorkspace,
   getWorkspacePath,
   getWorkspaceGroups,
-  getWorkspaceGroupFolders
+  getWorkspaceGroupFolders,
 } = require('./workspaces')
-const { toSentence, toCamel, uniq, sortObject, removeItem, toArray } = require('./utils')
-const { isValidName, getCommand, getScripts, getDependencies, readPackage, writePackage, getManager } = require('./utils/package')
-const { ask, confirm, _ask, _heading, makeChoicesGroup } = require('./utils/enquirer')
-const { log, exec, exit } = require('./utils/shell')
-const { ROOT } = require('./utils/vars')
+const {
+  isValidName,
+  getCommand,
+  getScripts,
+  getDependencies,
+  readPackage,
+  writePackage,
+  getManager,
+} = require('./utils/package')
 
 // ---------------------------------------------------------------------------------------------------------------------
 // region Packages
 // ---------------------------------------------------------------------------------------------------------------------
 
 function chooseScript (input = {}) {
+  // make options
   const makeOption = (path, name) => {
     return {
-      choice: `${path || '/'}: `.grey + name,
+      choice: path
+        ? path.replace(/^\//, '').grey + ' ' + name
+        : name,
       path,
       name,
     }
@@ -33,7 +45,18 @@ function chooseScript (input = {}) {
       items.push(...scripts)
       return items
     }, [])
-  const items = [...main, ...other]
+
+  // set up exclusion filter
+  const exclude = getSetting('scripts.exclude')
+  const rxExclude = exclude ? new RegExp(String(exclude)) : null
+  const fnInclude = rxExclude
+    ? choice => !rxExclude.test(choice.name)
+    : () => true
+
+  // build items
+  const items = [...main, ...other].filter(fnInclude)
+
+  // build choices
   const choices = items.map(item => item.choice)
 
   const options = {
@@ -42,7 +65,7 @@ function chooseScript (input = {}) {
     limit: 10,
     result (choice) {
       return items.find(item => item.choice === choice)
-    }
+    },
   }
   return ask('script', 'Script', options, input)
 }
@@ -67,7 +90,7 @@ function choosePackages (input = {}) {
           return 'Type one or more packages separated by spaces'
         }
         return !!answer
-      }
+      },
     }
     return ask(name, message, options, input).then(chooseDepType)
   }
@@ -104,13 +127,13 @@ function chooseDepType (input = {}) {
   const depTypes = {
     normal: '',
     development: 'dev',
-    peer: 'peer'
+    peer: 'peer',
   }
   const options = {
     choices: [
       'normal',
       'development',
-      'peer'
+      'peer',
     ],
     result (answer) {
       return depTypes[answer]
@@ -132,7 +155,7 @@ function chooseDepType (input = {}) {
  */
 function chooseWorkspace (input = {}) {
   const options = {
-    choices: getWorkspacesChoices()
+    choices: getWorkspacesChoices(),
   }
   return ask('workspace', 'Workspace', options, input)
 }
@@ -162,7 +185,7 @@ function chooseWorkspaceByType (type = 'source', multi = false) {
           }
         }
         return true
-      }
+      },
     }
     const message = `${toSentence(type)} workspace`
     return ask(type, multi ? `${message}(s)` : message, options, input)
@@ -192,7 +215,7 @@ function chooseWorkspaceGroupName (input = {}) {
     },
     result (answer) {
       return answer.trim().toLowerCase() + '/*'
-    }
+    },
   }
 
   return ask('group', 'Group name', options, input)
@@ -210,7 +233,7 @@ function chooseWorkspaceGroup (input = {}) {
   }
   const options = {
     type: 'select',
-    choices: [...getWorkspaceGroups(), ROOT]
+    choices: [...getWorkspaceGroups(), ROOT],
   }
   return ask('group', 'Workspace group', options, input)
 }
@@ -242,7 +265,7 @@ function chooseWorkspaceOptions (input = {}) {
           return 'Workspace group cannot be an existing folder'
         }
         return true
-      }
+      },
     }))
     .then(_ask('description', 'Description'))
     .then(input => {
@@ -266,7 +289,7 @@ function chooseWorkspaceOptions (input = {}) {
     .then((options) => {
       return {
         ...input,
-        options
+        options,
       }
     })
 }
@@ -298,7 +321,7 @@ function confirmRemoveWorkspace (input = {}) {
         return `Type "${workspace}" to confirm removal`
       }
       return true
-    }
+    },
   }
   return ask('confirm', 'Type workspace folder name to confirm removal'.red, options, input)
 }
@@ -349,7 +372,7 @@ function resetPackages (input = {}) {
       `.${path}/.turbo`,
       `.${path}/yarn.lock`,
       `.${path}/package-lock.json`,
-      `.${path}/node_modules/`
+      `.${path}/node_modules/`,
     ]
     return paths.filter(path => Fs.existsSync(path))
   }
@@ -361,7 +384,7 @@ function resetPackages (input = {}) {
         rimraf.sync(path)
       })
     }
-    // rimraf can sometimes fail, so try again if it does
+      // rimraf can sometimes fail, so try again if it does
     catch (err) {
       paths.forEach(path => {
         rimraf.sync(path)
@@ -437,8 +460,8 @@ function createWorkspace (input = {}) {
     scripts: {
       dev: dev || undefined,
       build: build || undefined,
-      test: test || 'echo "Error: no test specified" && exit 1'
-    }
+      test: test || 'echo "Error: no test specified" && exit 1',
+    },
   }
 
   // add folder / folder
@@ -593,14 +616,14 @@ function chooseTask () {
       'install',
       'uninstall',
       'update',
-      'reset'
+      'reset',
     ]),
     makeChoicesGroup('Workspaces', [
       'share',
       'group',
       'add',
-      'remove'
-    ])
+      'remove',
+    ]),
   ]
   return Promise
     .resolve(ask('task', '🚀 Task', { choices }))
@@ -695,5 +718,5 @@ function confirmTask (input) {
 // ---------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
-  chooseTask
+  chooseTask,
 }

@@ -74,7 +74,7 @@ You should immediately see set of navigable tasks:
   Scripts
   ❯ run
   Packages
-  install
+    install
     uninstall
     update
     reset
@@ -114,6 +114,18 @@ Script              - type to filter scripts
 ```
 
 Confirming will run the selected script.
+
+To exclude scripts (for example those starting with `~`) you can add an exclusion filter in `package.json`:
+
+```json
+{
+  "spaceman": {
+    "scripts": {
+      "exclude": "^~"
+    }
+  }
+}
+```
 
 ## Packages
 
