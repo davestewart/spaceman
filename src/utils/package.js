@@ -56,8 +56,15 @@ function getCommand (task = 'install', depType = '', workspace = '', deps = '') 
   return `${manager} ${command} ${deps} ${flag}`.replace(/\s+/g, ' ').trim()
 }
 
-function getPackagePath (path = '') {
-  return `.${path}/package.json`
+function getPackagePath (path = '', file = 'package.json') {
+  return `.${path}/${file}`
+}
+
+function getScripts (path = '') {
+  const scripts = readPackage(path).scripts
+  return scripts
+    ? Object.keys(scripts)
+    : []
 }
 
 function getDependencies (input) {
@@ -102,7 +109,9 @@ function writePackage (path = '', data) {
 
 module.exports = {
   isValidName,
+  getManager,
   getCommand,
+  getScripts,
   getDependencies,
   readPackage,
   writePackage,

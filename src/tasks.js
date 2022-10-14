@@ -9,7 +9,7 @@ const {
   getWorkspaceGroupFolders
 } = require('./workspaces')
 const { toSentence, toCamel, uniq, sortObject, removeItem, toArray } = require('./utils')
-const { isValidName, getCommand, getDependencies, readPackage, writePackage } = require('./utils/package')
+const { isValidName, getCommand, getScripts, getDependencies, readPackage, writePackage, getManager } = require('./utils/package')
 const { ask, confirm, _ask, _heading, makeChoicesGroup } = require('./utils/enquirer')
 const { log, exec, exit } = require('./utils/shell')
 const { ROOT } = require('./utils/vars')
@@ -17,6 +17,35 @@ const { ROOT } = require('./utils/vars')
 // ---------------------------------------------------------------------------------------------------------------------
 // region Packages
 // ---------------------------------------------------------------------------------------------------------------------
+
+function chooseScript (input = {}) {
+  const makeOption = (path, name) => {
+    return {
+      choice: `${path || '/'}: `.grey + name,
+      path,
+      name,
+    }
+  }
+  const main = getScripts().map(name => makeOption('', name))
+  const other = getWorkspaces()
+    .reduce((items, workspace) => {
+      const scripts = getScripts(workspace.path).map(name => makeOption(workspace.path, name))
+      items.push(...scripts)
+      return items
+    }, [])
+  const items = [...main, ...other]
+  const choices = items.map(item => item.choice)
+
+  const options = {
+    type: 'autocomplete',
+    choices,
+    limit: 10,
+    result (choice) {
+      return items.find(item => item.choice === choice)
+    }
+  }
+  return ask('script', 'Script', options, input)
+}
 
 /**
  * Choose a package to install
@@ -280,6 +309,21 @@ function confirmRemoveWorkspace (input = {}) {
 // ---------------------------------------------------------------------------------------------------------------------
 
 /**
+ * Runs a script in a specific package
+ *
+ * @param   {object}    input     Input from previous prompt
+ */
+function runScript (input = {}) {
+  const { path, name } = input.script
+  const manager = getManager()
+  const command = manager === 'yarn'
+    ? 'yarn'
+    : `${manager} run`
+  console.log('Running script')
+  exec(`cd .${path} && ${command} ${name} && exit`)
+}
+
+/**
  * Runs an install, uninstall or update command
  *
  * @param   {object}    input     Input from previous prompt
@@ -487,7 +531,6 @@ function removeWorkspace (input = {}) {
         if (folders.length === 0) {
           console.log('\nRemoving empty workspace group:')
           removeItem(pkgMain.workspaces, `${group}/*`)
-          // await wait(500)
           exec(`rimraf ./${group}`)
         }
 
@@ -543,6 +586,9 @@ function shareWorkspace (input = {}) {
  */
 function chooseTask () {
   const choices = [
+    makeChoicesGroup('Scripts', [
+      'run',
+    ]),
     makeChoicesGroup('Packages', [
       'install',
       'uninstall',
@@ -581,6 +627,25 @@ function runTask (task, input = {}) {
 
   // run task!
   switch (task) {
+    case 'run':
+      return Promise.resolve(input)
+        .then(chooseScript)
+        .then(runScript)
+
+    case 'install':
+    case 'uninstall':
+    case 'update':
+      return Promise.resolve(input)
+        .then(chooseWorkspace)
+        .then(choosePackages)
+        .then(confirmTask)
+        .then(runCommand)
+
+    case 'reset':
+      return Promise.resolve(input)
+        .then(confirmTask)
+        .then(resetPackages)
+
     case 'share':
       return Promise.resolve(input)
         .then(chooseWorkspaceByType('source'))
@@ -608,20 +673,6 @@ function runTask (task, input = {}) {
         .then(chooseWorkspace)
         .then(confirmRemoveWorkspace)
         .then(removeWorkspace)
-
-    case 'reset':
-      return Promise.resolve(input)
-        .then(confirmTask)
-        .then(resetPackages)
-
-    case 'install':
-    case 'uninstall':
-    case 'update':
-      return Promise.resolve(input)
-        .then(chooseWorkspace)
-        .then(choosePackages)
-        .then(confirmTask)
-        .then(runCommand)
 
     default:
       console.log(`Unknown task "${task}"`)

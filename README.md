@@ -24,6 +24,11 @@ Spaceman supports [NPM](https://docs.npmjs.com/cli/v8/using-npm/workspaces), [Ya
 
 The following tasks are available:
 
+**Scripts:**
+
+- [Run](#run)<br>
+  Run any root or package script
+
 **Packages:**
 
 - [Install](#install)<br>
@@ -66,8 +71,10 @@ You should immediately see set of navigable tasks:
 
 ```
 ? 🚀 Task … 
+  Scripts
+  ❯ run
   Packages
-  ❯ install
+  install
     uninstall
     update
     reset
@@ -95,6 +102,18 @@ Choose a task to run it and view further options:
 The choices should be self-explanatory, but check the documentation below for more detail.
 
 # Tasks
+
+## Packages
+
+### Scripts
+
+Run any root or package script:
+
+```
+Script              - type to filter scripts
+```
+
+Confirming will run the selected script.
 
 ## Packages
 
