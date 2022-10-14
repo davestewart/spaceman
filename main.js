@@ -1,3 +1,14 @@
 #!/usr/bin/env node
 require('colors')
-void require('./src/tasks').chooseTask()
+yargs = require('yargs/yargs')
+const { hideBin } = require('yargs/helpers')
+const { runTask, chooseTask } = require('./src/tasks')
+
+// args
+const argv = yargs(hideBin(process.argv)).argv
+const [task] = argv._
+
+// tasks
+task
+  ? runTask(task)
+  : chooseTask()

@@ -85,6 +85,12 @@ You should immediately see set of navigable tasks:
     remove
 ```
 
+To run a specific task, pass the task name as a second argument:
+
+```
+spaceman run
+```
+
 Choose a task to run it and view further options:
 
 ```
