@@ -9,6 +9,7 @@ const argv = yargs(hideBin(process.argv)).argv
 const [task] = argv._
 
 // tasks
+console.log()
 task
   ? runTask(task)
   : chooseTask()

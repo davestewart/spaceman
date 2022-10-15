@@ -124,9 +124,6 @@ function choosePackages (input = {}) {
     const options = {
       type: 'multiselect',
       choices,
-      validate (answer) {
-        return answer.length > 0
-      },
       result (answer) {
         return answer.join(' ')
       },
@@ -196,14 +193,6 @@ function chooseWorkspaceByType (type = 'source', multi = false) {
     const options = {
       type: multi ? 'multiselect' : 'select',
       choices: getWorkspacesChoices(getWorkspaces().filter(workspace => workspace.name !== input.source)),
-      validate (answer) {
-        if (multi) {
-          if (answer.length === 0) {
-            return 'You must choose at least one workspace'
-          }
-        }
-        return true
-      },
     }
     const message = `${toSentence(type)} workspace`
     return ask(type, multi ? `${message}(s)` : message, options, input)
@@ -591,7 +580,6 @@ function removeWorkspace (input = {}) {
 function shareWorkspace (input = {}) {
   // variables
   const { source, target } = input
-  const name = getWorkspace(source).name
   const targets = toArray(target)
 
   // update targets
@@ -602,7 +590,7 @@ function shareWorkspace (input = {}) {
     if (!data.dependencies) {
       data.dependencies = {}
     }
-    data.dependencies[name] = '*'
+    data.dependencies[source] = '*'
     data.dependencies = sortObject(data.dependencies)
 
     // update

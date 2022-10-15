@@ -56,13 +56,14 @@ function getWorkspaceGroupFolders (group) {
 }
 
 /**
- * Get a workspace by folder
+ * Get a workspace by value
  *
- * @param   {string}  folder
+ * @param   {string}  value
+ * @param   {string}  key
  * @returns {Workspace|null}
  */
-function getWorkspace (folder) {
-  return workspaces.find(workspace => workspace.folder === folder) || null
+function getWorkspace (value, key = 'name') {
+  return workspaces.find(workspace => workspace[key] === value) || null
 }
 
 /**
@@ -122,7 +123,7 @@ function getWorkspacesChoices (spaces = workspaces) {
   const groups = {}
   const root = []
   for (const workspace of spaces) {
-    const { group, folder } = workspace
+    const { group, folder, name } = workspace
     if (!group) {
       root.push(folder)
       continue
@@ -130,7 +131,7 @@ function getWorkspacesChoices (spaces = workspaces) {
     if (!groups[group]) {
       groups[group] = []
     }
-    groups[group].push(folder)
+    groups[group].push(name)
   }
   const choices = Object.keys(groups).sort().map(group => {
     return makeChoicesGroup(group, groups[group])

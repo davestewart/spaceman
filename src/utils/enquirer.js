@@ -28,11 +28,24 @@ function makeChoicesGroup (heading, choices) {
  * @returns {Promise<object>}             The updated input
  */
 function ask (name, message, options = {}, input = {}) {
+  // defaults
   const type = 'input'
   const validate = () => true
+
+  // select & multiselect
   if (options.choices && !options.type) {
     options.type = 'select'
   }
+  if (options.type === 'multiselect' && !options.validate) {
+    options.validate = function (answer) {
+      if (answer.length === 0) {
+        return 'You must choose at least one item'
+      }
+      return true
+    }
+  }
+
+  // prompt
   return prompt({ type, name, message, validate, ...options })
     .then(response => {
       const answer = response[name]

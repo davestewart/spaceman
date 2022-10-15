@@ -24,23 +24,23 @@ Spaceman supports [NPM](https://docs.npmjs.com/cli/v8/using-npm/workspaces), [Ya
 
 The following tasks are available:
 
-**Scripts:**
+**Scripts**
 
 - [Run](#run)<br>
   Run any root or package script
 
-**Packages:**
+**Packages**
 
 - [Install](#install)<br>
-  Install one or more packages to a target repository
+  Install one or more packages to a workspace
 - [Uninstall](#uninstall)<br>
-  Uninstall one or more packages from a target repository
+  Uninstall one or more packages from a workspace
 - [Update](#update)<br>
-  Update one or more packages in a target repository
+  Update one or more packages in a workspace
 - [Reset](#reset)<br>
-  Remove all Node modules-related files in all repos, and reinstall
+  Remove all Node modules-related files in the root and all workspaces, and reinstall
 
-**Workspaces:**
+**Workspaces**
 
 - [Share](#share)<br>
   Make a workspace available for use within another workspace
@@ -127,7 +127,7 @@ See [Settings](#settings) for configure options.
 
 ### Install
 
-Install one or more packages to a target repository:
+Install one or more packages to a workspace:
 
 ```
 Workspace           - pick the target workspace to install to
@@ -139,7 +139,7 @@ Confirming will install the new packages.
 
 ### Uninstall
 
-Uninstall one or more packages from a target repository:
+Uninstall one or more packages from a workspace:
 
 ```
 Workspace           - pick the target workspace to uninstall from
@@ -150,7 +150,7 @@ Confirming will remove the selected packages.
 
 ### Update
 
-Update one or more packages in a target repository:
+Update one or more packages in a workspace:
 
 ```
 Workspace           - pick the target workspace to update
@@ -161,10 +161,10 @@ Confirming will update the selected packages.
 
 ### Reset
 
-Remove all Node modules-related files in all repos, and reinstall:
+Remove all Node modules-related files in the root and all workspaces, and reinstall:
 
 ```
-Confirm reset?      - confirm to reset repo and workspaces
+Confirm reset?      - confirm to reset root and workspaces
 ```
 
 Confirming will:
@@ -238,7 +238,7 @@ Confirming will:
 - remove the dependency from other workspaces
 - uninstall workspace dependencies 
 - remove the workspace folder
-- optionally update the repository's `workspaces` list
+- optionally update the `workspaces` list
 
 
 ## Settings

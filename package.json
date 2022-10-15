@@ -1,6 +1,6 @@
 {
   "name": "spaceman",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Manage monorepo workspaces with a prompt-based CLI",
   "author": "Dave Stewart",
   "license": "ISC",
