@@ -1,26 +1,16 @@
 const { readPackage } = require('./package')
+const { getProperty } = require('./index')
 
 /**
  * Get a Spaceman setting from package.json
  *
  * @param   {string}      setting
+ * @param   {*}           defaults
  * @returns {string|{}}
  */
-function getSetting (setting = '') {
+function getSetting (setting = '', defaults = undefined) {
   let settings = readPackage()?.spaceman || {}
-  if (settings) {
-    const keys = setting.split('.')
-    do {
-      const key = keys.shift()
-      if (key && settings) {
-        settings = settings[key]
-      }
-      else {
-        return undefined
-      }
-    } while (keys.length)
-  }
-  return settings
+  return getProperty(settings, setting, defaults)
 }
 
 module.exports = {

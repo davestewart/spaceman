@@ -28,47 +28,61 @@ const {
 // ---------------------------------------------------------------------------------------------------------------------
 
 function chooseScript (input = {}) {
-  // make options
-  const makeOption = (path, name) => {
+  // helper
+  const makeChoice = (path, name) => {
+    const value = `${path} ${name}`
+    const message = path
+      ? path.replace(/^\//, '').grey + ' ' + name
+      : name
     return {
-      choice: path
-        ? path.replace(/^\//, '').grey + ' ' + name
-        : name,
-      path,
-      name,
+      value,
+      message,
+      indent: '   ',
+      data: {
+        path,
+        name,
+      }
     }
   }
-  const main = getScripts().map(name => makeOption('', name))
+
+  // make options
+  const main = getScripts().map(name => makeChoice('', name))
   const other = getWorkspaces()
     .reduce((items, workspace) => {
-      const scripts = getScripts(workspace.path).map(name => makeOption(workspace.path, name))
+      const scripts = getScripts(workspace.path).map(name => makeChoice(workspace.path, name))
       items.push(...scripts)
       return items
     }, [])
 
+
+  // settings
+  const { exclude, match } = getSetting('scripts', {})
+
   // set up exclusion filter
-  const exclude = getSetting('scripts.exclude')
   const rxExclude = exclude ? new RegExp(String(exclude)) : null
   const fnInclude = rxExclude
-    ? choice => !rxExclude.test(choice.name)
+    ? choice => !rxExclude.test(choice.data.name)
     : () => true
 
+  // set up match algorithm
+  const suggest = (text, choices) => {
+    const rx = match === 'loose'
+      ? new RegExp(text.split(/\s+/).map(text => text.split('').join('.*')).join('.*\\b.+'))
+      : new RegExp(text.replace(/\s+/g, '.*'))
+    return choices.filter(choice => rx.test(choice.value))
+  }
+
   // build items
-  const items = [...main, ...other].filter(fnInclude)
+  const choices = [...main, ...other].filter(fnInclude)
 
-  // build choices
-  const choices = items.map(item => item.choice)
-
+  // options
   const options = {
     type: 'autocomplete',
     choices,
     limit: 10,
-    suggest (text, choices) {
-      const rx = new RegExp(text.replace(/\s+/g, '.*'))
-      return choices.filter(choice => rx.test(choice.name))
-    },
-    result (choice) {
-      return items.find(item => item.choice === choice)
+    suggest,
+    result (value) {
+      return choices.find(item => item.value === value).data
     },
   }
   return ask('script', 'Script', options, input)

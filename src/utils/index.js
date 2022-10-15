@@ -16,6 +16,24 @@ function sortObject (data) {
   }, {})
 }
 
+function getProperty (data, path = '', defaults = undefined) {
+  if (data && typeof path === 'string') {
+    const keys = path.trim().split('.')
+    do {
+      const key = keys.shift()
+      if (key && data) {
+        data = data[key]
+      }
+      else {
+        return defaults
+      }
+    } while (keys.length)
+  }
+  return typeof data === undefined
+    ? defaults
+    : data
+}
+
 function removeItem (arr, item) {
   const index = arr.indexOf(item)
   if (index > -1) {
@@ -43,6 +61,7 @@ module.exports = {
   toSentence,
   toCamel,
   sortObject,
+  getProperty,
   removeItem,
   toArray,
   uniq,

@@ -121,17 +121,7 @@ Script              - type to filter scripts (use spaces for partial matching)
 
 Confirming will run the selected script.
 
-To exclude scripts (for example those starting with `~`) you can add an exclusion filter in `package.json`:
-
-```json
-{
-  "spaceman": {
-    "scripts": {
-      "exclude": "^~"
-    }
-  }
-}
-```
+See [Settings](#settings) for configure options.
 
 ## Packages
 
@@ -249,6 +239,32 @@ Confirming will:
 - uninstall workspace dependencies 
 - remove the workspace folder
 - optionally update the repository's `workspaces` list
+
+
+## Settings
+
+Some of Spaceman's tasks can be configured.
+
+To do this, add a `spaceman` section to your `package.json` and include the relevant sections:
+
+```json5
+{
+  "spaceman": {
+    "scripts": {
+      // regexp to exclude scripts from `run` list, e.g. scripts that start with ~
+      "exclude": "^~",
+      
+      // autocomplete match algorithm; choose between "tight" (default) or "loose" 
+      "match": "loose",
+    }
+  }
+}
+```
+
+Some information on the `script.match` types:
+
+- `tight`: matches on sequential characters, use spaces to start new match groups, i.e. `cli dev`
+- `loose`: matches on any character, i.e. `clde`
 
 ## Finally...
 
