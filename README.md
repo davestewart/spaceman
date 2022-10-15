@@ -109,9 +109,9 @@ The choices should be self-explanatory, but check the documentation below for mo
 
 # Tasks
 
-## Packages
+## Scripts
 
-### Scripts
+### Run
 
 Run any root or package script:
 
