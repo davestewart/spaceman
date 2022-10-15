@@ -29,7 +29,7 @@ function getProperty (data, path = '', defaults = undefined) {
       }
     } while (keys.length)
   }
-  return typeof data === undefined
+  return data === undefined
     ? defaults
     : data
 }
