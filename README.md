@@ -121,7 +121,7 @@ Script              - type to filter scripts (use spaces for partial matching)
 
 Confirming will run the selected script.
 
-See [Settings](#settings) for configure options.
+See [Configuration](#configuration) for additional options.
 
 ## Packages
 
@@ -241,7 +241,7 @@ Confirming will:
 - optionally update the `workspaces` list
 
 
-## Settings
+## Configuration
 
 Some of Spaceman's tasks can be configured.
 
