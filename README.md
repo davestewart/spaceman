@@ -8,9 +8,26 @@
 
 ## Abstract
 
-Workspaces provide a streamlined workflow to manage multiple packages within a single repository, but require a certain amount of knowledge, configuration and terminal-fu for everyday tasks.
+[Monorepos](https://turbo.build/repo/docs/handbook/what-is-a-monorepo) provide a way to manage multiple self-contained applications and packages within a single codebase:
 
-Spaceman makes running complex or multistep tasks easier by wrapping them in prompts, and batching commands on confirmation:
+```
++- my-awesome-app
+    +- apps
+    |   +- backend
+    |   |   +- package.json
+    |   +- frontend
+    |   |   +- package.json
+    +- packages
+    |   +- tools
+    |   |   +- package.json
+    |   +- utils
+    |       +- package.json
+    + package.json
+```
+
+[Workspaces](https://turbo.build/repo/docs/handbook/workspaces) are the building blocks of monorepos, but require a certain amount of knowledge, configuration and terminal-fu for everyday tasks.
+
+Spaceman simplifies complex or multistep workspace tasks by presenting them as prompts, and batching commands on confirmation:
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/davestewart/spaceman/master/res/spaceman.gif" alt="Spaceman CLI">
@@ -18,7 +35,7 @@ Spaceman makes running complex or multistep tasks easier by wrapping them in pro
 
 Why read the docs when you can just answer questions?
 
-Spaceman supports [NPM](https://docs.npmjs.com/cli/v8/using-npm/workspaces), [Yarn](https://classic.yarnpkg.com/lang/en/docs/workspaces/) and [Turborepo](https://turborepo.org/), with support for [PNPM](https://pnpm.io/workspaces) coming in the next release.
+Spaceman supports [NPM](https://docs.npmjs.com/cli/v8/using-npm/workspaces) and [Yarn](https://classic.yarnpkg.com/lang/en/docs/workspaces/) with support for [PNPM](https://pnpm.io/workspaces) coming in the next release. It also plays nice with monorepo tools such as [Turborepo](https://turborepo.org/), [Lerna](https://lerna.js.org/) and [Rush](https://rushjs.io/). 
 
 ## Overview
 
@@ -45,7 +62,7 @@ The following tasks are available:
 - [Share](#share)<br>
   Make a workspace available for use within another workspace
 - [Group](#group)<br>
-  Add a new workspace group
+  Add a new top-level workspace group
 - [Add](#add)<br>
   Add a new workspace
 - [Remove](#remove)<br>
@@ -121,7 +138,7 @@ Script              - type to filter scripts (use spaces for partial matching)
 
 Confirming will run the selected script.
 
-See [Settings](#settings) for configure options.
+See [Configuration](#configuration) for additional options.
 
 ## Packages
 
@@ -241,7 +258,7 @@ Confirming will:
 - optionally update the `workspaces` list
 
 
-## Settings
+## Configuration
 
 Some of Spaceman's tasks can be configured.
 
